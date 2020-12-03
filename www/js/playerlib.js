@@ -26,7 +26,8 @@
 const FEAT_KERNEL       = 1;        // y Kernel architecture option on System Config
 const FEAT_AIRPLAY      = 2;        // y Airplay renderer
 const FEAT_MINIDLNA     = 4;        // y DLNA server
-const FEAT_MPDAS        = 8;        // y MPD audio scrobbler
+//const FEAT_MPDAS        = 8;      // y MPD audio scrobbler (DEPRECATED)
+const FEAT_RECORDER     = 8;        //   Stream recorder
 const FEAT_SQUEEZELITE  = 16;       // y Squeezelite renderer
 const FEAT_UPMPDCLI     = 32;       // y UPnP client for MPD
 const FEAT_SQSHCHK      = 64;       //   Require squashfs for software update
@@ -40,7 +41,7 @@ const FEAT_DJMOUNT      = 8192;     // y UPnP media browser
 const FEAT_BLUETOOTH    = 16384;    // y Bluetooth renderer
 const FEAT_DEVTWEAKS	= 32768;	//   Developer tweaks
 //                      -------
-//                        31679
+//                        31671
 
 // For setTimout() in milliseconds
 const DEFAULT_TIMEOUT   = 250;
@@ -577,7 +578,7 @@ function resetPlayCtls() {
 	console.log('resetPlayCtls():');
 	$('#m-total, #playbar-total, #playbar-mtotal').text(formatKnobTotal('0'));
 	$('.play i').removeClass('fas fa-pause').addClass('fas fa-play');
-	$('#total').html(formatKnobTotal('0') + (SESSION.json['timecountup'] == '1' || parseInt(MPD.json['time']) == 0 ? '<i class="fas fa-caret-up countdown-caret"></i>' : '<i class="fas fa-caret-down countdown-caret"></i>'));
+	$('#total').html(formatKnobTotal('0'));
 	$('.playlist li.active ').removeClass('active');
 
 	updKnobAndTimeTrack();
@@ -704,8 +705,7 @@ function renderUI() {
             }
             $('#songsList .lib-entry-song .songtrack').removeClass('lib-track-highlight');
         }
-    	$('#total').html(formatKnobTotal(MPD.json['time'] ? MPD.json['time'] : 0) + (MPD.json['artist'] == 'Radio station' ? '' :
-            (SESSION.json['timecountup'] == '1' || parseInt(MPD.json['time']) == 0 ? '<i class="fas fa-caret-up countdown-caret"></i>' : '<i class="fas fa-caret-down countdown-caret"></i>')));
+    	$('#total').html(formatKnobTotal(MPD.json['time'] ? MPD.json['time'] : 0));
     	$('#m-total, #playbar-total').html(formatKnobTotal(MPD.json['time'] ? MPD.json['time'] : 0));
     	$('#playbar-mtotal').html('&nbsp;/&nbsp;' + formatKnobTotal(MPD.json['time']));
         $('#playbar-total').text().length > 5 ? $('#playbar-countdown, #m-countdown, #playbar-total, #m-total').addClass('long-time') :
@@ -1609,7 +1609,7 @@ function renderRadioView() {
             output += countryDiv;
             output += languageDiv;
             output += subGenreDiv;
-            
+
             //output += radioViewTxDiv;
             output += radioViewNvDiv;
             output += '</li>';
@@ -2243,7 +2243,7 @@ function getMiscLibOptions () {
 // Update clock radio settings
 $('#btn-clockradio-update').click(function(e){
     var startHH, startMM, startDays, stopHH, stopMM, stopDays;
-s
+
 	SESSION.json['clkradio_mode'] = $('#clockradio-mode span').text();
     SESSION.json['clkradio_name'] = $('#clockradio-playname').val();
 
